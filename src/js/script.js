@@ -91,6 +91,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
     initAccordion(){
       const thisProduct = this;
@@ -162,12 +163,19 @@
             // add option price to price variable
             price += option.price;
           }
-        } else {
+         else {
           // check if the option is default
           if(optionId.default) {
             // add option price to price variable
             price -= option.price;
           }
+         }
+
+        }
+        const optionImage = thisProduct.imageWrapper.querySelector();
+        console.log(optionImage);
+        if(optionImage) {
+          // Yes! We've found it!
         }
       }
 
@@ -175,6 +183,7 @@
     
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
+
     }
     
   } 
