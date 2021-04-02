@@ -92,7 +92,7 @@
         /* prevent default action for event */
       event.preventDefault();
         /* find active product (product that has active class) */
-      const activeProducts = document.querySelectorAll('.product, .active')
+      const activeProducts = document.querySelectorAll('.product');
       for(let activeProduct of activeProducts){
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         if(activeProduct != thisProduct.element) {
