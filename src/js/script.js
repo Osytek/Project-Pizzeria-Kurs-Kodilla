@@ -60,8 +60,8 @@
       thisProduct.id = id;
       thisProduct.data = data;
 
-      thisProduct.initAccordion();
       thisProduct.renderInMenu();
+      thisProduct.initAccordion();
       
 
       console.log('new Product:', thisProduct);
@@ -92,7 +92,7 @@
         /* prevent default action for event */
       event.preventDefault();
         /* find active product (product that has active class) */
-      const activeProducts = document.querySelectorAll('.product .active')
+      const activeProducts = document.querySelectorAll('.product, .active')
       for(let activeProduct of activeProducts){
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         if(activeProduct != thisProduct.element) {
