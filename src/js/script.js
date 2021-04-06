@@ -221,22 +221,28 @@
       
       thisWidget.value = newValue;
       thisWidget.input.value = thisWidget.value;
-      if(thisWidget.value !== newValue && !isNaN(newValue)) {
+      if(thisWidget.value !== newValue && !isNaN(newValue)){
         thisWidget.value = newValue;
-        
+      }if(thisWidget.value < settings.amountWidget.defaultMin){
+        thisWidget.value = settings.amountWidget.defaultMin;
+      }if(thisWidget.value > settings.amountWidget.defaultMax){
+        thisWidget.value = settings.amountWidget.defaultMax;
       }
-
+      console.log(value);
     }
+    
     initActions(){
       const thisWidget = this;
-      thisWidget.input.addEventListener('change', thisWidget.setValue(thisWidget.input.value));
+      thisWidget.input.addEventListener('change', function(){
+        thisWidget.setValue(thisWidget.input.value);
+      });
       thisWidget.linkDecrease.addEventListener('click', function(event){
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value --);
+        thisWidget.setValue(thisWidget.value - 1);
       });
       thisWidget.linkIncrease.addEventListener('click', function(event){
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value ++);
+        thisWidget.setValue(thisWidget.value + 1);
       });
 
     }
