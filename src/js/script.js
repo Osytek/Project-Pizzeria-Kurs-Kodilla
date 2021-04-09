@@ -169,6 +169,7 @@ const templates = {
       thisProduct.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
 
@@ -236,6 +237,16 @@ const templates = {
       thisProduct.amountWidgetElem.addEventListener('updated', function(){
         thisProduct.processOrder();
       });
+    }
+    addToCart(){
+      const thisProduct = this;
+      app.cart.add(thisProduct);
+    }
+    prepareCartProduct(){
+      const thisProduct = this;
+      const productSummary = {
+        thisProduct.id = id;
+      }
     }
   } 
   class AmountWidget{
@@ -311,6 +322,10 @@ const templates = {
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+    }
+    add(menuProduct){
+      // const thisCart = this;
+      console.log('adding product', menuProduct);
     }
     initActions(){
       const thisCart = this;
