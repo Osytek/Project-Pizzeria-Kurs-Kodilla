@@ -79,6 +79,7 @@ const settings = {
     defaultDeliveryFee: 20,
   },
   // CODE ADDED END
+  
 };
 
 const templates = {
@@ -226,8 +227,11 @@ const templates = {
       }
     
       // update calculated price in the HTML
+      thisProduct.priceSingle = price;
       price *= thisProduct.amountWidget.value;
+      
       thisProduct.priceElem.innerHTML = price;
+
 
     }
     initAmountWidget(){
@@ -240,14 +244,57 @@ const templates = {
     }
     addToCart(){
       const thisProduct = this;
-      app.cart.add(thisProduct);
+      app.cart.add(thisProduct.prepareCartProduct());
+      
     }
     prepareCartProduct(){
       const thisProduct = this;
       const productSummary = {
-        thisProduct.id = id;
-      }
+        id: thisProduct.id,
+        name: thisProduct.data.name,
+        amount: thisProduct.amountWidget.value,
+        price: thisProduct.priceElem.innerHTML,
+        priceSingle: thisProduct.priceSingle,
+        params: {function(){
+          thisProduct.prepareCartProductParams();
+        }},
+        
+      };
+      return productSummary;
+      
+      
     }
+    prepareCartProductParams() {
+      const thisProduct = this;
+    
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      const params = {};
+    
+      // for very category (param)
+      for(let paramId in thisProduct.data.params) {
+        const param = thisProduct.data.params[paramId];
+    
+        // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
+        params[paramId] = {
+          name: param.label,
+          options: {}
+        };
+    
+        // for every option in this category
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+    
+          if(optionSelected) {
+            params[paramId].options += option;
+          }
+        }
+      }
+      
+      return params;
+      
+    }
+    
   } 
   class AmountWidget{
     constructor(element){
@@ -324,7 +371,7 @@ const templates = {
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
     }
     add(menuProduct){
-      // const thisCart = this;
+    //  const thisCart = this;
       console.log('adding product', menuProduct);
     }
     initActions(){
