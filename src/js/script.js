@@ -250,14 +250,13 @@ const templates = {
     prepareCartProduct(){
       const thisProduct = this;
       const productSummary = {
+        
         id: thisProduct.id,
         name: thisProduct.data.name,
         amount: thisProduct.amountWidget.value,
         price: thisProduct.priceElem.innerHTML,
         priceSingle: thisProduct.priceSingle,
-        params: {function(){
-          thisProduct.prepareCartProductParams();
-        }},
+        params: thisProduct.prepareCartProductParams(),
         
       };
       return productSummary;
@@ -286,8 +285,10 @@ const templates = {
           const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
     
           if(optionSelected) {
-            params[paramId].options += option;
+            params[paramId].options[optionId] = option.label;
+            
           }
+          
         }
       }
       
@@ -363,16 +364,27 @@ const templates = {
       thisCart.getElements(element);
       thisCart.initActions();
       console.log('new Cart', thisCart);
+      
     }
     getElements(element){
       const thisCart = this;
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
+      
     }
     add(menuProduct){
-    //  const thisCart = this;
+      const thisCart = this;
       console.log('adding product', menuProduct);
+
+      const generatedHTML = templates.cartProduct();
+
+      thisCart.element = utils.createDOMFromHTML(generatedHTML);
+
+      const cartContainer = document.querySelector(select.containerOf.cart);
+
+      cartContainer.appendChild(thisCart.element);
     }
     initActions(){
       const thisCart = this;
