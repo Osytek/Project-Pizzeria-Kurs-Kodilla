@@ -3,6 +3,7 @@
 
 
 {
+  
   'use strict';
 
 const select = {
@@ -252,7 +253,7 @@ const templates = {
       const productSummary = {
         
         id: thisProduct.id,
-        name: thisProduct.data.name,
+        label: thisProduct.data.name,
         amount: thisProduct.amountWidget.value,
         price: thisProduct.priceElem.innerHTML,
         priceSingle: thisProduct.priceSingle,
@@ -275,8 +276,8 @@ const templates = {
     
         // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
         params[paramId] = {
-          name: param.label,
-          options: {}
+          label: param.label,
+          options: {},
         };
     
         // for every option in this category
@@ -378,7 +379,7 @@ const templates = {
       const thisCart = this;
       console.log('adding product', menuProduct);
 
-      const generatedHTML = templates.cartProduct();
+      const generatedHTML = templates.cartProduct(menuProduct);
 
       thisCart.element = utils.createDOMFromHTML(generatedHTML);
 
