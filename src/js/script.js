@@ -361,7 +361,7 @@ const templates = {
   class Cart{
     constructor(element){
       const thisCart = this;
-      thisCart.product = [];
+      thisCart.products = [];
       thisCart.getElements(element);
       thisCart.initActions();
       console.log('new Cart', thisCart);
@@ -385,6 +385,8 @@ const templates = {
 
       thisCart.dom.productList.appendChild(generatedDOM);
       
+      thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
+      console.log('thisCart.products', thisCart.products);
     }
     initActions(){
       const thisCart = this;
@@ -400,6 +402,38 @@ const templates = {
         /* toggle active class on thisProduct.element */
         thisCart.dom.wrapper.classList.toggle('active');
       }); 
+    }
+  }
+  class CartProduct{
+    constructor(menuProduct, element){
+      const thisCartProduct = this;
+      thisCartProduct.id = menuProduct.id;
+      thisCartProduct.label = menuProduct.label;
+      thisCartProduct.price = menuProduct.price;
+      thisCartProduct.priceSingle = menuProduct.priceSingle;
+      thisCartProduct.params = menuProduct.params;
+
+      thisCartProduct.getElements(element);
+      console.log('thisCartProduct', thisCartProduct);
+    }
+    getElements(element){
+      const thisCartProduct = this;
+
+      thisCartProduct.dom = {};
+      thisCartProduct.dom.wrapper = element;
+
+      thisCartProduct.dom.amountWidget = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.amountWidget);
+      thisCartProduct.dom.price = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.price);
+      thisCartProduct.dom.edit = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.edit);
+      thisCartProduct.dom.remove = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.remove);
+    }
+    initAmountWidget(){
+      const thisCartProduct = this;
+
+      thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.amountWidgetElem);
+      thisCartProduct.amountWidgetElem.addEventListener('updated', function(){
+        thisCartProduct.processOrder();
+      });
     }
   }
 
