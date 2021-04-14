@@ -432,22 +432,16 @@ const templates = {
     }
     initAmountWidget(){
       const thisCartProduct = this;
+      
 
-      thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.amountWidgetElem);
-      thisCartProduct.amountWidgetElem.addEventListener('updated', function(){
+      thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
+      thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
         const  thisCartProduct = this;
-        
-
-        if(thisCartProduct.amountWidget.default){
-          thisCartProduct.price = thisCartProduct.priceSingle;
-        }
-        if(!thisCartProduct.amountWidget.default){
-          thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amountWidget;
-
-        }
-        
+        thisCartProduct.amount *= thisCartProduct.amountWidget;
+        thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amount;
+        thisCartProduct.dom.price = thisCartProduct.price;
       });
-      thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
+      console.log('asdasdasd', thisCartProduct.amount);
     }
   }
 
