@@ -438,7 +438,7 @@ const templates = {
       thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
         const  thisCartProduct = this;
         thisCartProduct.amount *= thisCartProduct.amountWidget;
-        thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amount;
+        thisCartProduct.price *=  thisCartProduct.amount;
         thisCartProduct.dom.price = thisCartProduct.price;
       });
       console.log('asdasdasd', thisCartProduct.amount);
