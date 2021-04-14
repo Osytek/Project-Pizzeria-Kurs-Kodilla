@@ -232,6 +232,7 @@ const templates = {
       price *= thisProduct.amountWidget.value;
       
       thisProduct.priceElem.innerHTML = price;
+      thisProduct.price = price;
 
 
     }
@@ -255,7 +256,7 @@ const templates = {
         id: thisProduct.id,
         label: thisProduct.data.name,
         amount: thisProduct.amountWidget.value,
-        price: thisProduct.priceElem.innerHTML,
+        price: thisProduct.price,
         priceSingle: thisProduct.priceSingle,
         params: thisProduct.prepareCartProductParams(),
         
@@ -352,7 +353,9 @@ const templates = {
     announce(){
       const thisWidget = this;
   
-      const event = new Event('updated');
+      const event = new CustomEvent('updated', {
+        bubbles: true
+      });
       thisWidget.element.dispatchEvent(event);
     }
     
@@ -373,7 +376,10 @@ const templates = {
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
       thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
-      
+      thisCart.dom.deliveryFee = thisCart.dom.wrapper.querySelector(select.cart.deliveryFee);
+      thisCart.dom.subtotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
+      thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelector(select.cart.totalPrice);
+      thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
     }
     add(menuProduct){
       const thisCart = this;
@@ -403,28 +409,40 @@ const templates = {
         /* toggle active class on thisProduct.element */
         thisCart.dom.wrapper.classList.toggle('active');
       }); 
+      thisCart.dom.productList.addEventListener('updated', function(){
+        thisCart.update();
+      });
     }
-    update(){
+    update() {
       const thisCart = this;
-      const deliveryFee = settings.cart.defaultDeliveryFee;
-      const totalNumber = 0;
-      const subTotalPrice = 0;
-      for(let product of thisCart.products){
-      thisCart.totalNumber += amount;
-      thisCart.subTotalPrice = product.price;
+      thisCart.totalNumber = 0;
+      thisCart.subtotalPrice = 0;
+      thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
+
+      if (thisCart.totalNumber == 0 ) {
+        thisCart.deliveryFee == 0;
       }
-      thisCart.totalPrice = thisCart.subTotalPrice + thisCart.deliveryFee;
-      if(subTotalPrice == 0){
-        thisCart.totalPrice -= thisCart.deliveryFee;
-      }
-      console.log('deliveryFee', deliveryFee);
-      console.log('totalNumber', totalNumber);
-      console.log('subTotalPrice', subTotalPrice);
-      console.log('thisCart.totalNumber', thisCart.totalNumber);
-      console.log('thisCart.subTotalPrice', thisCart.subTotalPrice);
       
+ 
+      for (let element of thisCart.products) {
+        thisCart.totalNumber += element.amount;
+        thisCart.subtotalPrice += element.price;
+      }
+      
+      thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
+ 
+      thisCart.dom.deliveryFee.innerHTML = thisCart.deliveryFee;
+      thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
+      thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
+      thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
+      
+ 
+      console.log('TotalNumber', thisCart.totalNumber);
+      console.log('TotalSubtotalPrice', thisCart.subtotalPrice);
+      console.log('TotalPrice', thisCart.totalPrice);
     }
   }
+
   class CartProduct{
     constructor(menuProduct, element){
       const thisCartProduct = this;
