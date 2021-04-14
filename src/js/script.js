@@ -302,7 +302,7 @@ const templates = {
     constructor(element){
       const thisWidget = this;
       thisWidget.getElements(element);
-      thisWidget.setValue(settings.amountWidget.defaultValue);
+      thisWidget.setValue(thisWidget.input.value > 0 ? thisWidget.input.value : settings.amountWidget.defaultValue);
       thisWidget.initActions();
       
     }
@@ -360,6 +360,7 @@ const templates = {
   class Cart{
     constructor(element){
       const thisCart = this;
+  
       thisCart.products = [];
       thisCart.getElements(element);
       thisCart.initActions();
@@ -385,6 +386,7 @@ const templates = {
       thisCart.dom.productList.appendChild(generatedDOM);
       
       thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
+      thisCart.update();
       
     }
     initActions(){
@@ -401,6 +403,26 @@ const templates = {
         /* toggle active class on thisProduct.element */
         thisCart.dom.wrapper.classList.toggle('active');
       }); 
+    }
+    update(){
+      const thisCart = this;
+      const deliveryFee = settings.cart.defaultDeliveryFee;
+      const totalNumber = 0;
+      const subTotalPrice = 0;
+      for(let product of thisCart.products){
+      thisCart.totalNumber += amount;
+      thisCart.subTotalPrice = product.price;
+      }
+      thisCart.totalPrice = thisCart.subTotalPrice + thisCart.deliveryFee;
+      if(subTotalPrice == 0){
+        thisCart.totalPrice -= thisCart.deliveryFee;
+      }
+      console.log('deliveryFee', deliveryFee);
+      console.log('totalNumber', totalNumber);
+      console.log('subTotalPrice', subTotalPrice);
+      console.log('thisCart.totalNumber', thisCart.totalNumber);
+      console.log('thisCart.subTotalPrice', thisCart.subTotalPrice);
+      
     }
   }
   class CartProduct{
@@ -440,7 +462,8 @@ const templates = {
         thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amountWidget.value;
         
         thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
-        thisCartProduct.dom.amountWidget.innerHTML = thisCartProduct.amountWidget.value +thisCartProduct.amount;
+        
+        
       });
       
     }
