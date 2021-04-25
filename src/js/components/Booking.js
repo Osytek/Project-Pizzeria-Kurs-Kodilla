@@ -20,7 +20,7 @@ class Booking{
         thisBooking.dom = {};
         thisBooking.dom.wrapper = element;
         
-        console.log('asdasd', generatedHTML);
+        
 
         thisBooking.dom.wrapper.innerHTML = generatedHTML;
 
