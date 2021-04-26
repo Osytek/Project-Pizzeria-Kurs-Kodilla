@@ -202,5 +202,38 @@
       }
     }
   ],
-  "order": []
+  "order": [],
+  "booking": [
+    {
+      "id": 1,
+      "date": "2021-04-27",
+      "hour": "16:00",
+      "table": 1,
+      "duration": 3,
+      "ppl": 4,
+      "starters": ["water"]
+    }
+  ],
+  "event": [
+    {
+      "id": 1,
+      "date": "2021-04-27",
+      "hour": "12:30",
+      "table": 1,
+      "repeat": false,
+      "duration": 4,
+      "ppl": 3,
+      "starters": []
+    },
+    {
+      "id": 1,
+      "date": "2021-04-27",
+      "hour": "12:00",
+      "table": 1,
+      "repeat": "daily",
+      "duration": 4,
+      "ppl": 3,
+      "starters": []
+    }
+  ]
 }
