@@ -173,7 +173,7 @@
       }
 
     }
-    &.selected {
+     &.selected {
       cursor: not-allowed;
       color: lighten($color-dark, 40%);
 
@@ -184,7 +184,7 @@
         height: 100%;
         left: 0;
         top: 0;
-        background: $color-dark;
+        background: green;
         border: 1px solid black;
         opacity: 0.4;
       }

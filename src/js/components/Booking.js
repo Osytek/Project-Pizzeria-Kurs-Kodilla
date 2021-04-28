@@ -4,12 +4,11 @@ import AmountWidget from './AmountWidgets.js';
 import DatePicker from './DatePicker.js';
 import HourPicker from './HourPicker.js';
 
-
 class Booking{
     constructor(element){
         const thisBooking = this;
-
-        thisBooking.table = {};
+        thisBooking.reservation = [];
+        console.log('asdasdasd', thisBooking.reservation);
         
         thisBooking.render(element);
         thisBooking.initWidgets();
@@ -59,24 +58,28 @@ class Booking{
             thisBooking.updateDOM();
         });
         for(let table of thisBooking.dom.tables){
-            table.addEventListener('click', function(){
-                thisBooking.initTables();
+            
+            table.addEventListener('click', function(event){
+                if(!event.target.classList.contains('booked') && table.classList.contains('selected')){
+                    
+                    table.classList.remove('selected');
+                }else if(!event.target.classList.contains('booked') && !table.classList.contains('selected')){
+
+                    table.classList.add('selected');
+
+                    const tableId = table.getAttribute('data-table');
+
+                    thisBooking.reservation.push(tableId);
+
+                }else if(event.target.classList.contains('booked')){
+                    alert('We are sorry, but this table is reserved');
+                }
+                
             });
         }
     }
 
-    initTables(){
-        const thisBooking = this;
-        for(let table of thisBooking.dom.tables){
-            if(!table.classList.contains('booked')){
 
-                const booked = document.querySelector('.table[data-table="' + 'data-table' + '"]');
-                booked.classList.add('selected');
-            } else{
-                alert('We are sorry, this table is reserved');
-            }
-        }
-    }
     getData(){
         const thisBooking = this;
 
