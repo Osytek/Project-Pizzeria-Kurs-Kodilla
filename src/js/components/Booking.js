@@ -3,21 +3,24 @@ import {utils} from '../utils.js';
 import AmountWidget from './AmountWidgets.js';
 import DatePicker from './DatePicker.js';
 import HourPicker from './HourPicker.js';
-
+// Global
+const filters = [];
+console.log('filters', filters);
 class Booking{
     constructor(element){
         const thisBooking = this;
         thisBooking.reservation = [];
-        console.log('asdasdasd', thisBooking.reservation);
+        
         
         thisBooking.render(element);
         thisBooking.initWidgets();
         thisBooking.getData();
+        
     }
 
     render(element){
         const thisBooking = this;
-
+        thisBooking.sendBooking();
         /* generate HTML based on template */
         
         const generatedHTML = templates.bookingWidget(element);
@@ -56,14 +59,20 @@ class Booking{
 
         thisBooking.dom.wrapper.addEventListener('updated', function(){
             thisBooking.updateDOM();
+            const activeTables = document.querySelectorAll('.selected');
+            for(let activeTable of activeTables){
+                activeTable.classList.remove('selected');
+            }
         });
+        
+       
         for(let table of thisBooking.dom.tables){
             
             table.addEventListener('click', function(event){
-                if(!event.target.classList.contains('booked') && table.classList.contains('selected')){
-                    
-                    table.classList.remove('selected');
-                }else if(!event.target.classList.contains('booked') && !table.classList.contains('selected')){
+                const activeTables = document.querySelectorAll('.selected');
+                
+
+                if(!event.target.classList.contains('booked') && !table.classList.contains('selected')){
 
                     table.classList.add('selected');
 
@@ -71,12 +80,36 @@ class Booking{
 
                     thisBooking.reservation.push(tableId);
 
-                }else if(event.target.classList.contains('booked')){
+                }else if(!event.target.classList.contains('booked') && table.classList.contains('selected')){
+                    
+                    table.classList.remove('selected');
+                }
+                else if(event.target.classList.contains('booked')){
                     alert('We are sorry, but this table is reserved');
                 }
-                
+                for(let activeTable of activeTables){
+                    activeTable.classList.remove('selected');
+                }
             });
         }
+       
+        thisBooking.filtersForm =  document.querySelectorAll('.checkbox');
+        for(let filterForm of thisBooking.filtersForm){
+            filterForm.addEventListener('click', function(event){
+                    if(event.target.checked){
+                        filters.push(event.target.value);
+                    }
+                    else{
+                        filters.splice(filters.indexOf(event.target.value));
+                    }
+            });
+
+        }
+        thisBooking.dom.form = document.querySelector('.btn-secondary');
+        thisBooking.dom.form.addEventListener('submit', function(event){
+            event.preventDefault();
+            thisBooking.sendBooking();
+          });
     }
 
 
@@ -135,7 +168,7 @@ class Booking{
     parseData(bookings, eventsCurrent, eventsRepeat){
         const thisBooking = this;
 
-        thisBooking.booked - {};
+        thisBooking.booked = {};
 
         for(let item of bookings){
             thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
@@ -210,5 +243,35 @@ class Booking{
             }
         }
     }
+    sendBooking(){
+        const thisBooking = this;
+        const url = settings.db.url + '/' + settings.db.booking;
+        const payload = {
+            date: select.widgets.datePicker.input,
+            hour: select.widgets.hourPicker.input,
+            table: document.querySelector('.selected'),
+            duration: select.widgets.amount.input,
+            ppl: select.booking.peopleAmount.value,
+            starters: [],
+            phone: document.querySelector('.order-confirmation input'),
+            adress: document.querySelector('.order-confirmation input'),
+            
+        }; 
+        console.log('payload', payload);
+        
+        for(let starter of thisBooking.filters) {
+         payload.starters.push(starter.getData());
+        }
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        };
+        
+        fetch(url, options);
+        
+      }
 }
 export default Booking;

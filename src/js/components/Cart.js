@@ -94,6 +94,7 @@ class Cart{
       fetch(url, options);
       
     }
+    
 
     remove(){
       const thisCart = this;
