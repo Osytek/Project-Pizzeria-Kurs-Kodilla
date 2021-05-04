@@ -4,23 +4,27 @@ import AmountWidget from './AmountWidgets.js';
 import DatePicker from './DatePicker.js';
 import HourPicker from './HourPicker.js';
 // Global
+
 const filters = [];
 console.log('filters', filters);
 class Booking{
     constructor(element){
         const thisBooking = this;
         thisBooking.reservation = [];
+        thisBooking.bookings = {};
+        console.log('aaaaaa', thisBooking.reservation);
         
         
         thisBooking.render(element);
         thisBooking.initWidgets();
         thisBooking.getData();
+
         
     }
 
     render(element){
         const thisBooking = this;
-        thisBooking.sendBooking();
+        
         /* generate HTML based on template */
         
         const generatedHTML = templates.bookingWidget(element);
@@ -41,6 +45,13 @@ class Booking{
         thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
 
         thisBooking.dom.tableContainer = thisBooking.dom.wrapper.querySelector(select.containerOf.booking);
+
+
+        thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starters);
+        thisBooking.dom.date = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.input);
+        thisBooking.dom.hour = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.input); 
+        thisBooking.dom.people = thisBooking.dom.wrapper.querySelector(select.booking.peopleAmount);
+        
     }
     initWidgets(){
         const thisBooking = this;
@@ -111,6 +122,7 @@ class Booking{
             thisBooking.sendBooking();
           });
     }
+    
 
 
     getData(){
@@ -244,14 +256,15 @@ class Booking{
         }
     }
     sendBooking(){
+        
         const thisBooking = this;
         const url = settings.db.url + '/' + settings.db.booking;
         const payload = {
-            date: select.widgets.datePicker.input,
-            hour: select.widgets.hourPicker.input,
-            table: document.querySelector('.selected'),
-            duration: select.widgets.amount.input,
-            ppl: select.booking.peopleAmount.value,
+            date: thisBooking.dom.date.value,
+            hour: thisBooking.dom.hour.value,
+            table: document.querySelector('.floor-plan .table .selected'),
+            duration: [],
+            ppl: thisBooking.dom.people,
             starters: [],
             phone: document.querySelector('.order-confirmation input'),
             adress: document.querySelector('.order-confirmation input'),
@@ -259,9 +272,7 @@ class Booking{
         }; 
         console.log('payload', payload);
         
-        for(let starter of thisBooking.filters) {
-         payload.starters.push(starter.getData());
-        }
+
         const options = {
           method: 'POST',
           headers: {

@@ -63,6 +63,7 @@ export const select = {
     peopleAmount: '.people-amount',
     hoursAmount: '.hours-amount',
     tables: '.floor-plan .table',
+    starters: '.checkbox .checkbox__checkmark ',
   },
   nav: {
     links: '.main-nav a',
