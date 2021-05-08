@@ -64,6 +64,8 @@ export const select = {
     hoursAmount: '.hours-amount',
     tables: '.floor-plan .table',
     starters: '.checkbox .checkbox__checkmark ',
+    phone: '.order-confirmation [name="phone"]',
+    address: '.order-confirmation [name="address"]',
   },
   nav: {
     links: '.main-nav a',

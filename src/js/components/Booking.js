@@ -25,6 +25,7 @@ class Booking{
     render(element){
         const thisBooking = this;
         
+        
         /* generate HTML based on template */
         
         const generatedHTML = templates.bookingWidget(element);
@@ -46,11 +47,10 @@ class Booking{
 
         thisBooking.dom.tableContainer = thisBooking.dom.wrapper.querySelector(select.containerOf.booking);
 
-
+        thisBooking.dom.inputAddress = thisBooking.dom.wrapper.querySelector(select.booking.address);
+        thisBooking.dom.inputPhone = thisBooking.dom.wrapper.querySelector(select.booking.phone);
         thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starters);
-        thisBooking.dom.date = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.input);
-        thisBooking.dom.hour = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.input); 
-        thisBooking.dom.people = thisBooking.dom.wrapper.querySelector(select.booking.peopleAmount);
+        
         
     }
     initWidgets(){
@@ -255,24 +255,39 @@ class Booking{
             }
         }
     }
-    sendBooking(){
-        
+    sendBooking() {
         const thisBooking = this;
+     
         const url = settings.db.url + '/' + settings.db.booking;
+     
         const payload = {
-            date: thisBooking.dom.date.value,
-            hour: thisBooking.dom.hour.value,
-            table: document.querySelector('.floor-plan .table .selected'),
-            duration: [],
-            ppl: thisBooking.dom.people,
-            starters: [],
-            phone: document.querySelector('.order-confirmation input'),
-            adress: document.querySelector('.order-confirmation input'),
-            
-        }; 
-        console.log('payload', payload);
-        
-
+          date: thisBooking.date,
+          hour: thisBooking.hourPicker.value,
+          table: '',
+          ppl: thisBooking.peopleAmount.value,
+          duration: thisBooking.hoursAmount.value,
+          starters: [],
+          address: thisBooking.dom.inputAddress.value,
+          phone: thisBooking.dom.inputPhone.value,
+        };
+     
+        for (let starter of thisBooking.dom.starters) {
+          if (starter.checked == true) {
+            payload.starters.push(starter.value);
+          }
+        }
+     
+        for (let table of thisBooking.dom.tables) {
+     
+          const tableNumber = table.getAttribute(settings.booking.tableIdAttribute);
+          const tableId = parseInt(tableNumber);
+     
+          if (table.classList.contains('selected')) {
+            payload.table.push(tableId);
+            table.classList.replace('selected', 'booked');
+          }
+        }
+     
         const options = {
           method: 'POST',
           headers: {
@@ -280,9 +295,14 @@ class Booking{
           },
           body: JSON.stringify(payload),
         };
-        
-        fetch(url, options);
-        
+     
+        fetch(url, options)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (parsedResponse) {
+            console.log('parsedResponse', parsedResponse);
+          });
       }
 }
 export default Booking;
