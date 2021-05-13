@@ -6,13 +6,13 @@ import HourPicker from './HourPicker.js';
 // Global
 
 const filters = [];
-console.log('filters', filters);
+
 class Booking{
     constructor(element){
         const thisBooking = this;
         thisBooking.reservation = [];
         thisBooking.bookings = {};
-        console.log('aaaaaa', thisBooking.reservation);
+        
         
         
         thisBooking.render(element);
@@ -116,7 +116,7 @@ class Booking{
             });
 
         }
-        thisBooking.dom.form = document.querySelector('.btn-secondary');
+        thisBooking.dom.form = thisBooking.dom.wrapper.querySelector('.booking-form');
         thisBooking.dom.form.addEventListener('submit', function(event){
             event.preventDefault();
             thisBooking.sendBooking();
@@ -263,7 +263,7 @@ class Booking{
         const payload = {
           date: thisBooking.date,
           hour: thisBooking.hourPicker.value,
-          table: '',
+          table: [],
           ppl: thisBooking.peopleAmount.value,
           duration: thisBooking.hoursAmount.value,
           starters: [],
