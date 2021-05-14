@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 class Home{
     constructor(){
         const thisHome = this;
@@ -9,13 +10,8 @@ class Home{
 var flkty = new Flickity( elem, {
   // options
   cellAlign: 'left',
-  contain: true
-});
-
-// element argument can be a selector string
-//   for an individual element
-var flkty = new Flickity( '.main-carousel', {
-  // options
+  contain: true,
+  autoPlay: 3000
 });
     }
 }
