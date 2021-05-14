@@ -1,4 +1,6 @@
+/* global Flickity */
 /* eslint-disable no-unused-vars */
+
 class Home{
     constructor(){
         const thisHome = this;
